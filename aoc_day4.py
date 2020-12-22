@@ -5,45 +5,38 @@
 import re
 
 def check_valid_data(passport):
+    re_byr = "(byr:19[2-9][0-9])|(byr:200[0-2])"
+    re_iyr = "(iyr:201[0-9])|(iyr:2020)"
+    re_eyr = "(eyr:202[0-9])|(eyr:2030)"
+    re_hgt = "(hgt:1[5-8][0-9]cm)|(hgt:19[0-3]cm)|(hgt:[5][9]in)|(hgt:[6][0-9]in)|(hgt:7[0-6]in)"
+    re_hcl = "(hcl:#[a-f0-9]{6}[^\w])|(hcl:#[a-f0-9]{6}$)"
+    re_ecl = "ecl:(amb|blu|brn|gry|grn|hzl|oth)"
+    re_pid = "(pid:[0-9]{9}[^\d])|(pid:[0-9]{9}$)"
 
-    # conditions:
-    #
-    # byr (Birth Year) - four digits; at least 1920 and at most 2002.
-    # iyr (Issue Year) - four digits; at least 2010 and at most 2020.
-    # eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
-    # hgt (Height) - a number followed by either cm or in:
-    #     If cm, the number must be at least 150 and at most 193.
-    #     If in, the number must be at least 59 and at most 76.
-    # hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
-    # ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
-    # pid (Passport ID) - a nine-digit number, including leading zeroes.
-    # cid (Country ID) - ignored, missing or not.
-
-    # regex conditions
-    
-    re_byr = "byr:{1920, 2002}"
-    test_string = "ecl:utc byr:2029 hcl:#efcc98 iyr:2023"
-
+    regexs = (re_byr, re_iyr, re_eyr, re_hgt, re_ecl, re_pid, re_hcl)
+    data_is_valid = True
+    for regex in regexs:
+        if re.search(regex, passport) is None:
+            data_is_valid = False
+            break
+    return data_is_valid
 
 def check_valid_passport(passport, valid_passports):
     required_fields = ("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid")
-    optional_cid = "cid"
 
     all_req_fields_found = True
     for field in required_fields:
         if field not in passport:
             all_req_fields_found = False
 
-    # if all_req_fields_found:
-        # if check_valid_data(passport):
-            # valid_passports.append(passport)
+    if all_req_fields_found:
+        if check_valid_data(passport):
+            valid_passports.append(passport)
 
     return all_req_fields_found
 
-
 # Input Setup
 # BUG: skips the last passport if there aren't two new lines at the end of the input file
-# FIXED: added conditional if line is None
 f = open("aoc_day4_input.txt", "r")
 
 valid_passports = []
@@ -61,12 +54,11 @@ for passport in list_of_passports:
     if check_valid_passport(passport, valid_passports):
         num_valid += 1
 
-print(num_valid)
-print(len(valid_passports))
-
+print("Part 1 Answer: " + str(num_valid)) # 219
 
 # part 2
-re_byr = "byr:([1][9][2-9][0-9]|2000|2001|2002)"
-test_string = "ecl:utc byr:2000 hcl:#efcc98 iyr:2023"
-x = re.search(re_byr, test_string)
-print(x)
+print("Part 2 Answer (num valid passports): " + str(len(valid_passports)))
+
+
+
+
