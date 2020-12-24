@@ -21,6 +21,7 @@ def check_valid_data(passport):
             break
     return data_is_valid
 
+
 def check_valid_passport(passport, valid_passports):
     required_fields = ("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid")
 
@@ -34,6 +35,7 @@ def check_valid_passport(passport, valid_passports):
             valid_passports.append(passport)
 
     return all_req_fields_found
+
 
 # Input Setup
 # BUG: skips the last passport if there aren't two new lines at the end of the input file
@@ -54,10 +56,10 @@ for passport in list_of_passports:
     if check_valid_passport(passport, valid_passports):
         num_valid += 1
 
-print("Part 1 Answer: " + str(num_valid)) # 219
+print("Part 1 Answer: " + str(num_valid))  # 219
 
 # part 2
-print("Part 2 Answer (num valid passports): " + str(len(valid_passports)))
+print("Part 2 Answer (num valid passports): " + str(len(valid_passports)))  # 127
 
 
 
